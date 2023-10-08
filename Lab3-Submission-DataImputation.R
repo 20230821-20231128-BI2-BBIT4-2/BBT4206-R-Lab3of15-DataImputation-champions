@@ -257,53 +257,221 @@ nhanes_long_dataset <- NHANES %>%
   select(Age, AgeDecade, Education, Poverty, Work, LittleInterest, Depressed,
          BMI, Pulse, BPSysAve, BPDiaAve, DaysPhysHlthBad, PhysActiveDays)
 
+#load dataset
+student_performance_dataset <-
+  readr::read_csv(
+    "data/20230412-20230719-BI1-BBIT4-1-StudentPerformanceDataset.CSV", # nolint
+    col_types =
+      readr::cols(
+        class_group =
+          readr::col_factor(levels = c("A", "B", "C")),
+        gender = readr::col_factor(levels = c("1", "0")),
+        YOB = readr::col_date(format = "%Y"),
+        regret_choosing_bi =
+          readr::col_factor(levels = c("1", "0")),
+        drop_bi_now =
+          readr::col_factor(levels = c("1", "0")),
+        motivator =
+          readr::col_factor(levels = c("1", "0")),
+        read_content_before_lecture =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        anticipate_test_questions =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        answer_rhetorical_questions =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        find_terms_I_do_not_know =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        copy_new_terms_in_reading_notebook =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        take_quizzes_and_use_results =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        reorganise_course_outline =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        write_down_important_points =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        space_out_revision =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        studying_in_study_group =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        schedule_appointments =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        goal_oriented =
+          readr::col_factor(levels =
+                              c("1", "0")),
+        spaced_repetition =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4")),
+        testing_and_active_recall =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4")),
+        interleaving =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4")),
+        categorizing =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4")),
+        retrospective_timetable =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4")),
+        cornell_notes =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4")),
+        sq3r = readr::col_factor(levels =
+                                   c("1", "2", "3", "4")),
+        commute = readr::col_factor(levels =
+                                      c("1", "2",
+                                        "3", "4")),
+        study_time = readr::col_factor(levels =
+                                         c("1", "2",
+                                           "3", "4")),
+        repeats_since_Y1 = readr::col_integer(),
+        paid_tuition = readr::col_factor(levels =
+                                           c("0", "1")),
+        free_tuition = readr::col_factor(levels =
+                                           c("0", "1")),
+        extra_curricular = readr::col_factor(levels =
+                                               c("0", "1")),
+        sports_extra_curricular =
+          readr::col_factor(levels = c("0", "1")),
+        exercise_per_week = readr::col_factor(levels =
+                                                c("0", "1",
+                                                  "2",
+                                                  "3")),
+        meditate = readr::col_factor(levels =
+                                       c("0", "1",
+                                         "2", "3")),
+        pray = readr::col_factor(levels =
+                                   c("0", "1",
+                                     "2", "3")),
+        internet = readr::col_factor(levels =
+                                       c("0", "1")),
+        laptop = readr::col_factor(levels = c("0", "1")),
+        family_relationships =
+          readr::col_factor(levels =
+                              c("1", "2", "3", "4", "5")),
+        friendships = readr::col_factor(levels =
+                                          c("1", "2", "3",
+                                            "4", "5")),
+        romantic_relationships =
+          readr::col_factor(levels =
+                              c("0", "1", "2", "3", "4")),
+        spiritual_wellnes =
+          readr::col_factor(levels = c("1", "2", "3",
+                                       "4", "5")),
+        financial_wellness =
+          readr::col_factor(levels = c("1", "2", "3",
+                                       "4", "5")),
+        health = readr::col_factor(levels = c("1", "2",
+                                              "3", "4",
+                                              "5")),
+        day_out = readr::col_factor(levels = c("0", "1",
+                                               "2", "3")),
+        night_out = readr::col_factor(levels = c("0",
+                                                 "1", "2",
+                                                 "3")),
+        alcohol_or_narcotics =
+          readr::col_factor(levels = c("0", "1", "2", "3")),
+        mentor = readr::col_factor(levels = c("0", "1")),
+        mentor_meetings = readr::col_factor(levels =
+                                              c("0", "1",
+                                                "2", "3")),
+        `Attendance Waiver Granted: 1 = Yes, 0 = No` =
+          readr::col_factor(levels = c("0", "1")),
+        GRADE = readr::col_factor(levels =
+                                    c("A", "B", "C", "D",
+                                      "E"))),
+    locale = readr::locale())
+
+View(student_performance_dataset)
+
+student_long_dataset <- student_performance_dataset %>%
+  
+  select(gender,
+        #`CAT 2 (8%): x/100 x 100`,`Lab 4 - 2.h. - (Linear Discriminant Analysis) x/5`,
+         `Quiz 5 on Concept 5 (Dashboarding) x/10`,
+        `Lab 3 - 2.g. - (Logistic Regression using Gradient Descent) x/5`,
+         `Quiz 4 on Concept 4 (Non-Linear) x/22`,
+         `Lab 2 - 2.e. -  (Linear Regression using Gradient Descent) x/5`,
+         `CAT 1 (8%): x/38 x 100`,
+         `EXAM: x/60 (60%)`,
+         `Lab 1 - 2.c. - (Simple Linear Regression) x/5`,
+         `Quiz 3 on Concept 3 (Linear) x/15`,
+         `class_group`,
+         
+         )
+
+#rename columns
+student_long_dataset3 <-plyr::rename(student_long_dataset, c("Quiz 5 on Concept 5 (Dashboarding) x/10"="quiz5",
+                                      "Quiz 4 on Concept 4 (Non-Linear) x/22"="quiz4",
+                                      "Lab 2 - 2.e. -  (Linear Regression using Gradient Descent) x/5"="lab2",
+                                      "CAT 1 (8%): x/38 x 100"="cat1",
+                                      "EXAM: x/60 (60%)"="exam",
+                                      "Lab 1 - 2.c. - (Simple Linear Regression) x/5"="lab1",
+                                      "Quiz 3 on Concept 3 (Linear) x/15"="quiz3",
+                                      "Lab 3 - 2.g. - (Logistic Regression using Gradient Descent) x/5"="lab3"))
+
+
 ### Subset of rows ----
 # We then select 500 random observations to be included in the dataset
+# `CAT 2 (8%): x/100 x 100`,`Lab 4 - 2.h. - (Linear Discriminant Analysis) x/5`,
 rand_ind <- sample(seq_len(nrow(nhanes_long_dataset)), 500)
 nhanes_dataset <- nhanes_long_dataset[rand_ind, ]
 
 # STEP 3. Confirm the "missingness" in the Dataset before Imputation ----
 # Are there missing values in the dataset?
-any_na(nhanes_dataset)
+any_na(student_long_dataset3)
 
 
 # How many?
-n_miss(nhanes_dataset)
+n_miss(student_long_dataset3)
 
 # What is the percentage of missing data in the entire dataset?
-prop_miss(nhanes_dataset)
+prop_miss(student_long_dataset3)
 
 # How many missing values does each variable have?
-nhanes_dataset %>% is.na() %>% colSums()
+student_long_dataset3 %>% is.na() %>% colSums()
 
 # What is the number and percentage of missing values grouped by
 # each variable?
-miss_var_summary(nhanes_dataset)
+miss_var_summary(student_long_dataset3)
 
 # What is the number and percentage of missing values grouped by
 # each observation?
-miss_case_summary(nhanes_dataset)
+miss_case_summary(student_long_dataset3)
 
 # Which variables contain the most missing values?
-gg_miss_var(nhanes_dataset)
+gg_miss_var(student_long_dataset3)
 
 # Where are missing values located (the shaded regions in the plot)?
-vis_miss(nhanes_dataset) + theme(axis.text.x = element_text(angle = 80))
+vis_miss(student_long_dataset3) + theme(axis.text.x = element_text(angle = 80))
 
 # Which combinations of variables are missing together?
-gg_miss_upset(nhanes_dataset)
+gg_miss_upset(student_long_dataset3)
 
 # Create a heatmap of "missingness" broken down by "AgeDecade"
 # First, confirm that the "AgeDecade" variable is a categorical variable
-is.factor(nhanes_dataset$AgeDecade)
+is.factor(student_long_dataset3$class_group)
 # Second, create the visualization
-gg_miss_fct(nhanes_dataset, fct = AgeDecade)
+gg_miss_fct(student_long_dataset3, fct = class_group)
 
-# We can also create a heatmap of "missingness" broken down by "Depressed"
+# We can also create a heatmap of "missingness" broken down by "gender"
 # First, confirm that the "Depressed" variable is a categorical variable
-is.factor(nhanes_dataset$Depressed)
+is.factor(student_long_dataset3$gender)
 # Second, create the visualization
-gg_miss_fct(nhanes_dataset, fct = Depressed)
+gg_miss_fct(student_long_dataset3, fct = gender)
+
+
 
 # STEP 4. Use the MICE package to perform data imputation ----
 # We can use the dplyr::mutate() function inside the dplyr package to add new
@@ -328,7 +496,9 @@ nhanes_dataset <- nhanes_dataset %>%
 
 # To arrive at good predictions for each variable containing missing values, we
 # save the variables that are at least "somewhat correlated" (r > 0.3).
-somewhat_correlated_variables <- quickpred(nhanes_dataset, mincor = 0.3) # nolint
+somewhat_correlated_variables_std <- quickpred(student_long_dataset, mincor = 0.3) # nolint
+
+somewhat_correlated_variables_std3 <- quickpred(student_long_dataset3, mincor = 0.3) # nolint
 
 # m = 11 Specifies that the imputation (filling in the missing data) will be
 #         performed 11 times (multiple times) to create several complete
@@ -347,9 +517,9 @@ somewhat_correlated_variables <- quickpred(nhanes_dataset, mincor = 0.3) # nolin
 #            categorical data with more than 2 categories, and
 #         3. "polr": Proportional Odds model for ordered categorical
 #            data with more than 2 categories.
-nhanes_dataset_mice <- mice(nhanes_dataset, m = 11, method = "pmm",
+student_dataset_mice <- mice(student_long_dataset3, m = 11, method = "pmm",
                             seed = 7,
-                            predictorMatrix = somewhat_correlated_variables)
+                            predictorMatrix = somewhat_correlated_variables_std3)
 
 # One can then train a model to predict MAP using BMI and PhysActiveDays or to
 # identify the p-Value and confidence intervals between MAP and BMI and
@@ -357,68 +527,72 @@ nhanes_dataset_mice <- mice(nhanes_dataset, m = 11, method = "pmm",
 
 # We can use multiple scatter plots (a.k.a. strip-plots) to visualize how
 # random the imputed data is in each of the 11 datasets.
-stripplot(nhanes_dataset_mice,
-          MAP ~ BMI | .imp,
+stripplot(student_dataset_mice,
+          `Quiz 5 on Concept 5 (Dashboarding) x/10`,`Lab 3 - 2.g. - (Logistic Regression using Gradient Descent) x/5` ~ `Quiz 4 on Concept 4 (Non-Linear) x/22` | .imp,
           pch = 20, cex = 1)
 
-stripplot(nhanes_dataset_mice,
-          MAP ~ PhysActiveDays | .imp,
+stripplot(student_dataset_mice,
+          quiz3 ~ quiz5 | .imp,
+          pch = 20, cex = 1)
+
+stripplot(student_dataset_mice,
+          exam ~ quiz5 | .imp,
           pch = 20, cex = 1)
 
 ## Impute the missing data ----
 # We then create imputed data for the final dataset using the mice::complete()
 # function in the mice package to fill in the missing data.
-nhanes_dataset_imputed <- mice::complete(nhanes_dataset_mice, 1)
+students_dataset_imputed <- mice::complete(student_dataset_mice, 1)
 
 # STEP 5. Confirm the "missingness" in the Imputed Dataset ----
 # A textual confirmation that the dataset has no more missing values in any
 # feature:
-miss_var_summary(nhanes_dataset_imputed)
+miss_var_summary(students_dataset_imputed)
 
 # A visual confirmation that the dataset has no more missing values in any
 # feature:
-Amelia::missmap(nhanes_dataset_imputed)
+Amelia::missmap(students_dataset_imputed)
 
 #########################
 # Are there missing values in the dataset?
-any_na(nhanes_dataset_imputed)
+any_na(students_dataset_imputed)
 
 # How many?
-n_miss(nhanes_dataset_imputed)
+n_miss(students_dataset_imputed)
 
 # What is the percentage of missing data in the entire dataset?
-prop_miss(nhanes_dataset_imputed)
+prop_miss(students_dataset_imputed)
 
 # How many missing values does each variable have?
-nhanes_dataset_imputed %>% is.na() %>% colSums()
+students_dataset_imputed %>% is.na() %>% colSums()
 
 # What is the number and percentage of missing values grouped by
 # each variable?
-miss_var_summary(nhanes_dataset_imputed)
+miss_var_summary(students_dataset_imputed)
 
 # What is the number and percentage of missing values grouped by
 # each observation?
-miss_case_summary(nhanes_dataset_imputed)
+miss_case_summary(students_dataset_imputed)
 
 # Which variables contain the most missing values?
-gg_miss_var(nhanes_dataset_imputed)
+gg_miss_var(students_dataset_imputed)
 
 # We require the "ggplot2" package to create more appealing visualizations
 
 # Where are missing values located (the shaded regions in the plot)?
-vis_miss(nhanes_dataset_imputed) + theme(axis.text.x = element_text(angle = 80))
+vis_miss(students_dataset_imputed) + theme(axis.text.x = element_text(angle = 80))
 
 # Which combinations of variables are missing together?
 
 # Note: The following command should give you an error stating that at least 2
 # variables should have missing data for the plot to be created.
-gg_miss_upset(nhanes_dataset_imputed)
+gg_miss_upset(students_dataset_imputed)
 
 # Create a heatmap of "missingness" broken down by "AgeDecade"
 # First, confirm that the "AgeDecade" variable is a categorical variable
-is.factor(nhanes_dataset_imputed$AgeDecade)
+is.factor(students_dataset_imputed$class_group)
 # Second, create the visualization
-gg_miss_fct(nhanes_dataset_imputed, fct = AgeDecade)
+gg_miss_fct(students_dataset_imputed, fct = class_group)
 
 # We can also create a heatmap of "missingness" broken down by "Depressed"
 # First, confirm that the "Depressed" variable is a categorical variable

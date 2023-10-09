@@ -256,6 +256,7 @@ require("Amelia")
 nhanes_long_dataset <- NHANES %>%
   select(Age, AgeDecade, Education, Poverty, Work, LittleInterest, Depressed,
          BMI, Pulse, BPSysAve, BPDiaAve, DaysPhysHlthBad, PhysActiveDays)
+View(NHANES)
 
 ### Subset of rows ----
 # We then select 500 random observations to be included in the dataset
@@ -347,11 +348,12 @@ somewhat_correlated_variables <- quickpred(nhanes_dataset, mincor = 0.3) # nolin
 #            categorical data with more than 2 categories, and
 #         3. "polr": Proportional Odds model for ordered categorical
 #            data with more than 2 categories.
+
 nhanes_dataset_mice <- mice(nhanes_dataset, m = 11, method = "pmm",
                             seed = 7,
                             predictorMatrix = somewhat_correlated_variables)
 
-# One can then train a model to predict MAP using BMI and PhysActiveDays or to
+  # One can then train a model to predict MAP using BMI and PhysActiveDays or to
 # identify the p-Value and confidence intervals between MAP and BMI and
 # PhysActiveDays
 

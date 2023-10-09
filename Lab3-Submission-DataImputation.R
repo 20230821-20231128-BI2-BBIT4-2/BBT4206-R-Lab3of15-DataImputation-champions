@@ -1,30 +1,3 @@
-# *****************************************************************************
-# Lab 3: Data Imputation ----
-#
-# Course Code: BBT4206
-# Course Name: Business Intelligence II
-# Semester Duration: 21st August 2023 to 28th November 2023
-#
-# Lecturer: Allan Omondi
-# Contact: aomondi_at_strathmore_dot_edu
-#
-# Note: The lecture contains both theory and practice. This file forms part of
-#       the practice. It has required lab work submissions that are graded for
-#       coursework marks.
-#
-# License: GNU GPL-3.0-or-later
-# See LICENSE file for licensing information.
-# *****************************************************************************
-
-
-# **[OPTIONAL] Initialization: Install and use renv ----
-# The R Environment ("renv") package helps you create reproducible environments
-# for your R projects. This is helpful when working in teams because it makes
-# your R projects more isolated, portable and reproducible.
-
-# Further reading:
-#   Summary: https://rstudio.github.io/renv/
-#   More detailed article: https://rstudio.github.io/renv/articles/renv.html
 
 # "renv" It can be installed as follows:
 # if (!is.element("renv", installed.packages()[, 1])) {
@@ -194,22 +167,6 @@ require("languageserver")
 # The following packages should be installed and loaded before proceeding to the
 # subsequent steps.
 
-## NHANES ----
-# The dataset we will use (for educational purposes) is the US National Health
-# and Nutrition Examination Study (NHANES) dataset created from 1999 to 2004.
-
-# Documentation of NHANES:
-#   https://cran.r-project.org/package=NHANES or
-#   https://cran.r-project.org/web/packages/NHANES/NHANES.pdf or
-#   http://www.cdc.gov/nchs/nhanes.htm
-
-# This requires the "NHANES" package available in R
-
-if (!is.element("NHANES", installed.packages()[, 1])) {
-  install.packages("NHANES", dependencies = TRUE,
-                   repos = "https://cloud.r-project.org")
-}
-require("NHANES")
 
 ## dplyr ----
 if (!is.element("dplyr", installed.packages()[, 1])) {
@@ -251,16 +208,9 @@ if (!is.element("Amelia", installed.packages()[, 1])) {
 }
 require("Amelia")
 
-# STEP 2. Create a subset of the variables/features ----
-# We select only the following 13 features to be included in the dataset:
-nhanes_long_dataset <- NHANES %>%
-  select(Age, AgeDecade, Education, Poverty, Work, LittleInterest, Depressed,
-         BMI, Pulse, BPSysAve, BPDiaAve, DaysPhysHlthBad, PhysActiveDays)
-
-#load dataset
 student_performance_dataset <-
   readr::read_csv(
-    "data/20230412-20230719-BI1-BBIT4-1-StudentPerformanceDataset.CSV", # nolint
+    "data/student_performance_dataset.csv", # nolint
     col_types =
       readr::cols(
         class_group =
@@ -394,9 +344,10 @@ student_performance_dataset <-
     locale = readr::locale())
 
 View(student_performance_dataset)
-
+# STEP 2. Create a subset of the variables/features ----  
 student_long_dataset <- student_performance_dataset %>%
-  
+
+
   select(gender,
         #`CAT 2 (8%): x/100 x 100`,`Lab 4 - 2.h. - (Linear Discriminant Analysis) x/5`,
          `Quiz 5 on Concept 5 (Dashboarding) x/10`,
@@ -411,7 +362,7 @@ student_long_dataset <- student_performance_dataset %>%
          
          )
 
-#rename columns
+# rename columns
 student_long_dataset3 <-plyr::rename(student_long_dataset, c("Quiz 5 on Concept 5 (Dashboarding) x/10"="quiz5",
                                       "Quiz 4 on Concept 4 (Non-Linear) x/22"="quiz4",
                                       "Lab 2 - 2.e. -  (Linear Regression using Gradient Descent) x/5"="lab2",
@@ -422,11 +373,6 @@ student_long_dataset3 <-plyr::rename(student_long_dataset, c("Quiz 5 on Concept 
                                       "Lab 3 - 2.g. - (Logistic Regression using Gradient Descent) x/5"="lab3"))
 
 
-### Subset of rows ----
-# We then select 500 random observations to be included in the dataset
-# `CAT 2 (8%): x/100 x 100`,`Lab 4 - 2.h. - (Linear Discriminant Analysis) x/5`,
-rand_ind <- sample(seq_len(nrow(nhanes_long_dataset)), 500)
-nhanes_dataset <- nhanes_long_dataset[rand_ind, ]
 
 # STEP 3. Confirm the "missingness" in the Dataset before Imputation ----
 # Are there missing values in the dataset?
@@ -477,26 +423,12 @@ gg_miss_fct(student_long_dataset3, fct = gender)
 # We can use the dplyr::mutate() function inside the dplyr package to add new
 # variables that are functions of existing variables
 
-# In this case, it is used to create a new variable called,
-# "Median Arterial Pressure (MAP)"
-# Further reading:
-#   https://en.wikipedia.org/wiki/Mean_arterial_pressure
-
-nhanes_dataset <- nhanes_dataset %>%
-  mutate(MAP = BPDiaAve + (1 / 3) * (BPSysAve - BPDiaAve))
-
-# MAP can be positively correlated with "BMI", unfortunately, BMI was reported
-# to have approximately 4.8% missing values.
-
-# MAP can also be negatively correlated with "PhysActiveDays" which had
-# approximately 55% missing data.
 
 # We finally begin to make use of Multivariate Imputation by Chained
 # Equations (MICE). We use 11 multiple imputations.
 
 # To arrive at good predictions for each variable containing missing values, we
 # save the variables that are at least "somewhat correlated" (r > 0.3).
-somewhat_correlated_variables_std <- quickpred(student_long_dataset, mincor = 0.3) # nolint
 
 somewhat_correlated_variables_std3 <- quickpred(student_long_dataset3, mincor = 0.3) # nolint
 
@@ -521,15 +453,10 @@ student_dataset_mice <- mice(student_long_dataset3, m = 11, method = "pmm",
                             seed = 7,
                             predictorMatrix = somewhat_correlated_variables_std3)
 
-# One can then train a model to predict MAP using BMI and PhysActiveDays or to
-# identify the p-Value and confidence intervals between MAP and BMI and
-# PhysActiveDays
 
 # We can use multiple scatter plots (a.k.a. strip-plots) to visualize how
 # random the imputed data is in each of the 11 datasets.
-stripplot(student_dataset_mice,
-          `Quiz 5 on Concept 5 (Dashboarding) x/10`,`Lab 3 - 2.g. - (Logistic Regression using Gradient Descent) x/5` ~ `Quiz 4 on Concept 4 (Non-Linear) x/22` | .imp,
-          pch = 20, cex = 1)
+
 
 stripplot(student_dataset_mice,
           quiz3 ~ quiz5 | .imp,
@@ -588,28 +515,12 @@ vis_miss(students_dataset_imputed) + theme(axis.text.x = element_text(angle = 80
 # variables should have missing data for the plot to be created.
 gg_miss_upset(students_dataset_imputed)
 
-# Create a heatmap of "missingness" broken down by "AgeDecade"
-# First, confirm that the "AgeDecade" variable is a categorical variable
+# Create a heatmap of "missingness" broken down by "class_group"
+# First, confirm that the "class_group" variable is a categorical variable
 is.factor(students_dataset_imputed$class_group)
 # Second, create the visualization
 gg_miss_fct(students_dataset_imputed, fct = class_group)
 
-# We can also create a heatmap of "missingness" broken down by "Depressed"
-# First, confirm that the "Depressed" variable is a categorical variable
-is.factor(nhanes_dataset_imputed$Depressed)
-# Second, create the visualization
-gg_miss_fct(nhanes_dataset_imputed, fct = Depressed)
-
-# Additional Dataset for Practice (the Soybean dataset) ----
-# An additional dataset that you can use to practice data imputation is the
-# "Soybean" dataset for agriculture. It is available in the mlbench package.
-# You can load it by executing the following code:
-
-# if (!is.element("mlbench", installed.packages()[, 1])) {
-#   install.packages("mlbench", dependencies = TRUE) # nolint
-# }
-# require("mlbench") # nolint
-# data(Soybean) # nolint
 
 # [OPTIONAL] **Deinitialization: Create a snapshot of the R environment ----
 # Lastly, as a follow-up to the initialization step, record the packages

@@ -267,6 +267,7 @@ nhanes_dataset <- nhanes_long_dataset[rand_ind, ]
 # Are there missing values in the dataset?
 any_na(nhanes_dataset)
 
+
 # How many?
 n_miss(nhanes_dataset)
 

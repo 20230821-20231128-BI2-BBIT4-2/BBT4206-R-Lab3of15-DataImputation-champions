@@ -78,7 +78,7 @@ The dataset that was used can be downloaded here:
 
 ### Reference:
 
-*\<Cite the dataset here using APA\>  
+*\<Omondi,A.(2023).20230412-20230719-BI1-BBIT4-StudentPerformanceDataset.https://drive.google.com/drive/folders/1-BGEhfOwquXF6KKXwcvrx7WuZXuqmW9q?usp=sharing>\>  
 Refer to the APA 7th edition manual for rules on how to cite datasets:
 <https://apastyle.apa.org/style-grammar-guidelines/references/examples/data-set-references>*
 
